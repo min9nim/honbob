@@ -1,34 +1,32 @@
 import { useState } from 'react'
 import req from '../utils/req'
-import h, { a, div, header, nav, section, span } from '../utils/hyperscript'
-import { CopyOutlined } from '@ant-design/icons'
-import { copyToClipboard, urlReg } from '../utils'
-import { Input, message, notification, Skeleton } from 'antd'
-import QrCode from '../components/QrCode'
+import h, { div, header, section } from '../utils/hyperscript'
+import { copyToClipboard } from '../utils'
+import { Input, message, notification } from 'antd'
 import './index.scss'
+import useList from '../swrs/useList'
+import { go } from 'mingutils'
+import { join, map, prop } from 'ramda'
 
 const { Search } = Input
 
 export default () => {
-  const [miniUrl, setMiniUrl] = useState(null)
+  const {data: list, mutate, loaded} = useList()
   const [loading, setLoading] = useState(false)
+  const [name, setName] = useState(null)
 
   const minimize = async value => {
     if (!value.trim()) {
-      // notification.warning({ message: 'URL is empty' })
-      return
-    }
-    if (!urlReg.test(value)) {
-      notification.warning({ message: 'URL is not valid' })
       return
     }
     try {
       setLoading(true)
-      const { miniUrlId } = await req.post('/api/url?action=create', {
-        url: value,
+      await req.post('/api/add', {
+        name: value,
       })
-      window.$logger.debug('res', miniUrlId)
-      setMiniUrl(window.location.origin + '/' + miniUrlId)
+      setName('')
+      mutate()
+
     } catch (e) {
       notification.warning({ message: e.message })
     } finally {
@@ -54,20 +52,12 @@ export default () => {
           enterButton: '참가',
           size: 'large',
           onSearch: minimize,
+          onChange: (e) => setName(e.target.value),
+          value: name,
+
         }),
       ]),
-      (miniUrl || loading) &&
-        h(Skeleton, { loading }, [
-          div('.result', [
-            h(QrCode, { value: miniUrl }),
-            div('.link', [
-              nav([a({ href: miniUrl }, [miniUrl])]),
-              span('.copy', { onClick: () => copy(miniUrl) }, [
-                h(CopyOutlined, ['링크복사']),
-              ]),
-            ]),
-          ]),
-        ]),
+      div([loaded && go(list, map(prop('name')), join(', '))])
     ]),
   ])
 }
