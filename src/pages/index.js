@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import req from '../utils/req'
 import h, { div, header, section } from '../utils/hyperscript'
 import { copyToClipboard } from '../utils'
@@ -39,6 +39,16 @@ export default () => {
     message.success('링크 복사 완료')
   }
 
+  useEffect(() => {
+    try{
+      window.IPMapper.initializeMap("map");
+      window.IPMapper.addIPMarker("111.111.111.111");
+    } catch(e){
+      console.error(e)
+    }
+
+  }, [list])
+
   return div('.index', [
     header([div('.title', ['Let\'s HobBob against CORONA-19:)'])]),
     section([
@@ -49,7 +59,7 @@ export default () => {
           autoFocus: true,
           allowClear: true,
           placeholder: '이름',
-          enterButton: '참가',
+          enterButton: '함께하기',
           size: 'large',
           onSearch: minimize,
           onChange: (e) => setName(e.target.value),
@@ -57,7 +67,8 @@ export default () => {
 
         }),
       ]),
-      div([loaded && go(list, map(prop('name')), join(', '))])
+      div([loaded && go(list, map(prop('name')), join(', '))]),
+      div('#map', {style: {height: '500px'}}),
     ]),
   ])
 }
