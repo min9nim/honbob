@@ -8,7 +8,11 @@ export default async function req(path, option) {
   if (!res.ok) {
     throw new Error(url + ' [' + res.status + ']')
   }
-  return res.json()
+  const result = await res.json()
+  if(result.status !== 'ok'){
+    throw Error(result.message)
+  }
+  return result
 }
 
 req.get = path => req(path, { method: 'GET' })
