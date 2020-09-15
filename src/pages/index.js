@@ -42,16 +42,16 @@ export default () => {
   }
 
   return div('.index', [
-    header([div('.title', ['Minimize your URL :)'])]),
+    header([div('.title', ['Let\'s HobBob against CORONA-19:)'])]),
     section([
-      div('.desc', ['Paste the URL to be shortened.']),
+      div('.desc', ['혼밥 운동에 함께 참여하길 원한다면 이름을 입력해 주세요']),
       div('.input', [
         h(Search, {
           loading,
           autoFocus: true,
           allowClear: true,
-          placeholder: 'https://',
-          enterButton: 'Minimize',
+          placeholder: '이름',
+          enterButton: '참가',
           size: 'large',
           onSearch: minimize,
         }),
