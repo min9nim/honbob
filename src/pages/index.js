@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import req from '../utils/req'
-import h, { div, header, section } from '../utils/hyperscript'
-import { copyToClipboard } from '../utils'
-import { Input, message, notification } from 'antd'
+import h, { div, h3, header, section } from '../utils/hyperscript'
+import { Input, notification } from 'antd'
 import './index.scss'
 import useList from '../swrs/useList'
 import { go } from 'mingutils'
@@ -60,8 +59,9 @@ export default () => {
           value: name,
         }),
       ]),
-      div([loaded && go(list, map(prop('name')), join(', '))]),
-      div('#map', { style: { height: '500px' } }),
+      div('#map', { style: { height: '500px', marginTop: '10px' } }),
+      h3({style: {marginTop: '10px'}}, ['함께하는 사람들 :)']),
+      div({style: {marginTop: '10px'}}, [loaded && go(list, map(prop('name')), join(', '))]),
     ]),
   ])
 }
