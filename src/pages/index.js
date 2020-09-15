@@ -11,7 +11,7 @@ import { join, map, prop } from 'ramda'
 const { Search } = Input
 
 export default () => {
-  const {data: list, mutate, loaded} = useList()
+  const { data: list, mutate, loaded } = useList()
   const [loading, setLoading] = useState(false)
   const [name, setName] = useState(null)
 
@@ -26,7 +26,6 @@ export default () => {
       })
       setName('')
       mutate()
-
     } catch (e) {
       notification.warning({ message: e.message })
     } finally {
@@ -34,23 +33,18 @@ export default () => {
     }
   }
 
-  function copy(value) {
-    copyToClipboard(value)
-    message.success('링크 복사 완료')
-  }
-
   useEffect(() => {
-    try{
-      window.IPMapper.initializeMap("map");
-      window.IPMapper.addIPMarker("111.111.111.111");
-    } catch(e){
+    try {
+      window.IPMapper.initializeMap('map')
+      // window.IPMapper.addIPMarker("111.111.111.111");
+      window.IPMapper.addIPArray(list.map(prop('ip')))
+    } catch (e) {
       console.error(e)
     }
-
   }, [list])
 
   return div('.index', [
-    header([div('.title', ['Let\'s HobBob against CORONA-19:)'])]),
+    header([div('.title', ["Let's HobBob against CORONA-19:)"])]),
     section([
       div('.desc', ['혼밥 운동에 함께 참여하길 원한다면 이름을 입력해 주세요']),
       div('.input', [
@@ -62,13 +56,12 @@ export default () => {
           enterButton: '함께하기',
           size: 'large',
           onSearch: minimize,
-          onChange: (e) => setName(e.target.value),
+          onChange: e => setName(e.target.value),
           value: name,
-
         }),
       ]),
       div([loaded && go(list, map(prop('name')), join(', '))]),
-      div('#map', {style: {height: '500px'}}),
+      div('#map', { style: { height: '500px' } }),
     ]),
   ])
 }
