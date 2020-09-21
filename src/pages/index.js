@@ -6,6 +6,7 @@ import './index.scss'
 import useList from '../swrs/useList'
 import { go } from 'mingutils'
 import { join, map, prop } from 'ramda'
+import { getLocations } from './index.fn'
 
 const { Search } = Input
 
@@ -37,10 +38,33 @@ export default () => {
     try {
       var options = { //지도를 생성할 때 필요한 기본 옵션
         center: new window.kakao.maps.LatLng(37.450701, 127.570667), //지도의 중심좌표.
-        level: 14 //지도의 레벨(확대, 축소 정도)
+        // level: 14 //지도의 레벨(확대, 축소 정도)
+        level: 12 //지도의 레벨(확대, 축소 정도)
       };
 
       var map = new window.kakao.maps.Map(mapRef.current, options); //지도 생성 및 객체 리턴
+
+
+
+      getLocations(list).then(locations => {
+        console.log(locations)
+        locations.forEach(({latitude, longitude}) => {
+          // 마커가 표시될 위치입니다
+          var markerPosition  = new window.kakao.maps.LatLng(latitude, longitude);
+
+          // 마커를 생성합니다
+          var marker = new window.kakao.maps.Marker({
+            position: markerPosition
+          });
+
+          // 마커가 지도 위에 표시되도록 설정합니다
+          marker.setMap(map);
+        })
+      })
+
+
+
+
     } catch (e) {
       console.error(e)
     }
