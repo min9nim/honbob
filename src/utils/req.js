@@ -2,14 +2,17 @@ const API_SERVER = process.env.REACT_APP_API_URL
 
 console.log('API_SERVER', API_SERVER)
 
+
+export const isExternal = (path) => path.startsWith('https://') || path.startsWith('//')
+
 export default async function req(path, option) {
-  const url = path.startsWith('http') ? path : API_SERVER + path
+  const url = isExternal(path) ? path : API_SERVER + path
   const res = await fetch(url, option)
   if (!res.ok) {
     throw new Error(url + ' [' + res.status + ']')
   }
   const result = await res.json()
-  if(result.status !== 'ok' && path.startsWith('/') ){
+  if(result.status !== 'ok' && !isExternal(path) ){
     throw Error(result.message)
   }
   return result
