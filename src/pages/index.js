@@ -43,8 +43,8 @@ export default () => {
       };
 
       var map = new window.kakao.maps.Map(mapRef.current, options); //지도 생성 및 객체 리턴
-
-
+      var zoomControl = new window.kakao.maps.ZoomControl();
+      map.addControl(zoomControl, window.kakao.maps.ControlPosition.RIGHT);
 
       getLocations(list).then(locations => {
         console.log(locations)
