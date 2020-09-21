@@ -3,13 +3,13 @@ const API_SERVER = process.env.REACT_APP_API_URL
 console.log('API_SERVER', API_SERVER)
 
 export default async function req(path, option) {
-  const url = API_SERVER + path
+  const url = path.startsWith('http') ? path : API_SERVER + path
   const res = await fetch(url, option)
   if (!res.ok) {
     throw new Error(url + ' [' + res.status + ']')
   }
   const result = await res.json()
-  if(result.status !== 'ok'){
+  if(result.status !== 'ok' && path.startsWith('/') ){
     throw Error(result.message)
   }
   return result
