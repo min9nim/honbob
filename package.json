@@ -19,7 +19,6 @@
     "if-logger": "^0.12.5",
     "mingutils": "^0.5.0",
     "moment": "^2.27.0",
-    "qrcode": "^1.4.4",
     "ramda": "^0.27.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -28,7 +27,6 @@
     "react-hyperscript": "^3.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
-    "shortid": "^2.2.15",
     "swr": "^0.3.2"
   },
   "eslintConfig": {
