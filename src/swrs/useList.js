@@ -5,7 +5,7 @@ export default () => {
   const { data, error, isValidating, mutate } = useSWR('/api/list', req.get)
 
   return {
-    data: data?.result,
+    data: data?.result || [],
     loaded: data || error,
     isValidating,
     mutate,
