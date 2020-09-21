@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import req from '../utils/req'
 import h, { div, h3, header, section } from '../utils/hyperscript'
 import { Input, notification } from 'antd'
@@ -13,6 +13,7 @@ export default () => {
   const { data: list, mutate, loaded } = useList()
   const [loading, setLoading] = useState(false)
   const [name, setName] = useState(null)
+  const mapRef = useRef(null)
 
   const minimize = async value => {
     if (!value.trim()) {
@@ -34,9 +35,12 @@ export default () => {
 
   useEffect(() => {
     try {
-      window.IPMapper.initializeMap('map')
-      // window.IPMapper.addIPMarker("111.111.111.111");
-      window.IPMapper.addIPArray(list.map(prop('ip')))
+      var options = { //지도를 생성할 때 필요한 기본 옵션
+        center: new window.kakao.maps.LatLng(37.450701, 127.570667), //지도의 중심좌표.
+        level: 14 //지도의 레벨(확대, 축소 정도)
+      };
+
+      var map = new window.kakao.maps.Map(mapRef.current, options); //지도 생성 및 객체 리턴
     } catch (e) {
       console.error(e)
     }
@@ -59,7 +63,7 @@ export default () => {
           value: name,
         }),
       ]),
-      div('#map', { style: { height: '500px', marginTop: '10px' } }),
+      div('#map', { ref:mapRef, style: { height: '500px', marginTop: '10px' } }),
       h3({style: {marginTop: '10px'}}, ['함께하는 사람들 :)']),
       div({style: {marginTop: '10px'}}, [loaded && go(list, map(prop('name')), join(', '))]),
     ]),
